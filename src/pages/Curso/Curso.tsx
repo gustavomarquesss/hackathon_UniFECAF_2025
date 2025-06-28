@@ -1,43 +1,20 @@
 import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
 import { FaBell, FaComments, FaEnvelope } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo-unifecaf.png";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import TrailContentModal from "../../components/TrailContentModal";
+import conteudosJava from "../../data/conteudoJava";
 
 export default function Curso() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [conteudos, setConteudos] = useState(conteudosJava);
 
   const progresso = 0;
   const diasRestantes = 45;
-
-  const [conteudos, setConteudos] = useState([
-    {
-      titulo: "1. O que é Java?",
-      resumo: "Java é uma linguagem de programação de alto nível...",
-      completo: `Java é uma linguagem de programação de alto nível, orientada a objetos e portátil...
-                [texto completo aqui]`,
-      status: "Não iniciado",
-    },
-    {
-      titulo: "2. Onde Java é utilizado?",
-      resumo: "Java é amplamente utilizado em vários setores...",
-      completo: `Java é amplamente utilizado em vários setores, como desenvolvimento web e mobile...
-[texto completo aqui]`,
-      status: "Não iniciado",
-    },
-    {
-      titulo: "3. Ferramentas importantes no mundo Java",
-      resumo:
-        "Java é fortemente baseado na programação orientada a objetos (POO)...",
-      completo: `Java é fortemente baseado na programação orientada a objetos (POO), utilizando ferramentas como...
-[texto completo aqui]`,
-      status: "Não iniciado",
-    },
-  ]);
 
   return (
     <div className="bg-prussian-blue text-white min-vh-100 px-4 py-4">
@@ -171,56 +148,16 @@ export default function Curso() {
         </div>
       </div>
 
-      {/* Modal com conteúdo completo */}
-      <Modal
+      <TrailContentModal
         show={showModal}
-        onHide={() => setShowModal(false)}
-        centered
-        size="lg"
-      >
-        <Modal.Body className="text-dark p-4 rounded">
-          <h4>{conteudos[currentStep].titulo}</h4>
-          <h5 className="fw-semibold text-primary">
-            {conteudos[currentStep].titulo.split(". ")[1]}
-          </h5>
-          <p>{conteudos[currentStep].completo}</p>
-          <div className="text-end">
-            <Button
-              className="bg-jade text-white fw-semibold border-0 px-5 py-2 rounded"
-              onClick={() => {
-                const atualizado = [...conteudos];
-                atualizado[currentStep].status = "Concluído";
-                setConteudos(atualizado);
-
-                const confetti = document.createElement("div");
-                confetti.innerHTML = "🎉 Concluído!";
-                Object.assign(confetti.style, {
-                  position: "fixed",
-                  top: "40%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  background: "#28a745",
-                  color: "#fff",
-                  padding: "20px 40px",
-                  borderRadius: "10px",
-                  fontWeight: "bold",
-                  fontSize: "24px",
-                  zIndex: 9999,
-                  animation: "fadeOut 2s forwards",
-                });
-                document.body.appendChild(confetti);
-                setTimeout(() => {
-                  document.body.removeChild(confetti);
-                }, 2000);
-
-                setShowModal(false);
-              }}
-            >
-              Concluir
-            </Button>
-          </div>
-        </Modal.Body>
-      </Modal>
+        onClose={() => setShowModal(false)}
+        currentContent={conteudos[currentStep]}
+        onComplete={() => {
+          const atualizado = [...conteudos];
+          atualizado[currentStep].status = "Concluído";
+          setConteudos(atualizado);
+        }}
+      />
     </div>
   );
 }

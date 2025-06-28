@@ -7,6 +7,7 @@ import GitHub from "../../assets/github.png";
 import Python from "../../assets/desabilitado.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { formatPhoneNumber } from "../../utils/format";
 
 export default function Perfil() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function Perfil() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [emailError, setEmailError] = useState("");
 
   // Simula carregamento de dados (depois troque pelo seu fetch/axios)
   useEffect(() => {
@@ -35,9 +37,25 @@ export default function Perfil() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    const newValue = name === "telefone" ? formatPhoneNumber(value) : value;
+    let updatedValue = value;
 
-    setFormData({ ...formData, [name]: newValue });
+    if (name === "telefone") {
+      updatedValue = formatPhoneNumber(value); // usa a função aqui
+    }
+
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        setEmailError("E-mail inválido");
+      } else {
+        setEmailError("");
+      }
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: updatedValue,
+    }));
   };
 
   const handleCancel = () => {
@@ -51,16 +69,6 @@ export default function Perfil() {
   };
 
   if (isLoading) return <p className="text-light">Carregando...</p>;
-
-  const formatPhoneNumber = (value: string) => {
-    const cleaned = value.replace(/\D/g, "");
-
-    if (cleaned.length <= 10) {
-      return cleaned.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
-    }
-
-    return cleaned.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
-  };
 
   return (
     <div className="min-vh-100 bg-prussian-blue d-flex flex-column">
@@ -150,6 +158,9 @@ export default function Perfil() {
               onChange={handleChange}
               className="form-control"
             />
+            {emailError && (
+              <small className="text-danger mt-1 d-block">{emailError}</small>
+            )}
           </div>
 
           <div className="mb-4">
