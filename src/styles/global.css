@@ -1,0 +1,73 @@
+:root {
+  --green-blue: #0064a9;
+  --indigo-dye: #004b79;
+  --jade: #1bb267;
+  --prussian-blue: #01263d;
+  --light-blue: #a8d0db;
+  --bs-body-font-family:
+}
+
+html, body {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+/* Utilitários personalizados */
+.bg-prussian-blue {
+  background-color: var(--prussian-blue);
+}
+
+.text-jade {
+  color: var(--jade);
+}
+
+.bg-jade {
+  background-color: var(--jade);
+}
+
+.bg-light-blue {
+  background-color: var(--light-blue);
+}
+
+.toggle-btn {
+  width: 40px;
+  height: 20px;
+  border-radius: 999px;
+  background-color: #ccc;
+  border: none;
+  padding: 0;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle-btn.active {
+  background-color: var(--jade);
+}
+
+.toggle-btn::before {
+  content: "";
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  background-color: white;
+  top: 3px;
+  left: 3px;
+  border-radius: 50%;
+  transition: left 0.3s;
+}
+
+.toggle-btn.active::before {
+  left: 23px;
+}
+
+.custom-gap {
+  column-gap: 6em;
+  row-gap: 3rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
